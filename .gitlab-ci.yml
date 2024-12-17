@@ -1,0 +1,131 @@
+image: node:18.16.1
+
+stages:
+  - build
+  - deploy_dev
+  - deploy_qa
+  - publish
+  - publish_widget
+
+variables:
+  SERVER_IP: 220.90.208.23
+  APP_NAME_PRIVATE: 'ekr-wapl-talk-front-private-talk'
+  APP_NAME_WORK: 'ekr-wapl-talk-front-work-talk'
+  SERVER_USER: root
+  SERVER_PW: tmax
+  NPM_TOKEN: $NPM_TOKEN
+  DEPLOY_DIR_PRIVATE: /usr/local/apache2/htdocs/ekr/wapl-talk-front/private_talk
+  DEPLOY_DIR_WORK: /usr/local/apache2/htdocs/ekr/wapl-talk-front/work_talk
+
+before_script:
+  - apt-get update -y
+  - apt-get install -y sshpass zip
+
+build_project:
+  stage: build
+  variables:
+    CI: 'false'
+  script:
+    - VERSION_NAME=$(echo ${CI_COMMIT_TAG} | sed 's/-ekr$//')
+    - ZIP_FILE_NAME_WORK=${APP_NAME_WORK}-${VERSION_NAME}
+    - ZIP_FILE_NAME_PRIVATE=${APP_NAME_PRIVATE}-${VERSION_NAME}
+    - yarn add cross-env --dev
+    - echo "ekr work build_project started..."
+    - yarn build:ekr
+    - echo "Build complete ${ZIP_FILE_NAME_WORK}"
+    - cd build && zip -r ../${ZIP_FILE_NAME_WORK}.zip . && cd ..
+    - echo "ekr private build_project started..."
+    - yarn build:ekr_private
+    - echo "Build complete ${ZIP_FILE_NAME_PRIVATE}"
+    - cd build && zip -r ../${ZIP_FILE_NAME_PRIVATE}.zip . && cd ..
+
+    - echo "build_project completed"
+  artifacts:
+    paths:
+      - ${APP_NAME_PRIVATE}-*.zip
+      - ${APP_NAME_WORK}-*.zip
+  only:
+    - /^.*-ekr(-test)?$/
+  tags:
+    - pl1-3 ubuntu
+
+deploy_dev:
+  stage: deploy_dev
+  script:
+    - VERSION_NAME=$(echo ${CI_COMMIT_TAG} | sed 's/-ekr$//')
+    - export ZIP_FILE_NAME_PRIVATE=${APP_NAME_PRIVATE}-${VERSION_NAME}
+    - export ZIP_FILE_NAME_WORK=${APP_NAME_WORK}-${VERSION_NAME}
+    - echo "QA deploy_project started..."
+    - yarn add ws
+    - node src/deploy/ekr/deploy_script.js
+  dependencies:
+    - build_project
+  only:
+    - /^.*-ekr(-test)?$/
+  tags:
+    - pl1-3 ubuntu
+
+deploy_qa:
+  stage: deploy_qa
+  script:
+    - VERSION_NAME=$(echo ${CI_COMMIT_TAG} | sed 's/-ekr$//')
+    - ZIP_FILE_NAME_PRIVATE=${APP_NAME_PRIVATE}-${VERSION_NAME}
+    - ZIP_FILE_NAME_WORK=${APP_NAME_WORK}-${VERSION_NAME}
+    - echo "QA deploy_project started..."
+    - |
+      if sshpass -p $SERVER_PW ssh $SERVER_USER@$SERVER_IP "[ -f $DEPLOY_DIR_PRIVATE/${ZIP_FILE_NAME_PRIVATE}.zip ] || [ -f $DEPLOY_DIR_WORK/${ZIP_FILE_NAME_WORK}.zip ]"; then
+        echo "Error: Zip Already Exist"
+        exit 1
+      else
+        cp info/ekr.txt info/wapl_talk_front_info.txt
+        sshpass -p $SERVER_PW scp -o StrictHostKeyChecking=no ${ZIP_FILE_NAME_PRIVATE}.zip $SERVER_USER@$SERVER_IP:$DEPLOY_DIR_PRIVATE
+        sshpass -p $SERVER_PW scp -o StrictHostKeyChecking=no ${ZIP_FILE_NAME_WORK}.zip $SERVER_USER@$SERVER_IP:$DEPLOY_DIR_WORK
+        sshpass -p $SERVER_PW scp info/wapl_talk_front_info.txt $SERVER_USER@$SERVER_IP:$DEPLOY_DIR_PRIVATE/wapl_talk_front_info.txt
+        sshpass -p $SERVER_PW scp info/wapl_talk_front_info.txt $SERVER_USER@$SERVER_IP:$DEPLOY_DIR_WORK/wapl_talk_front_info.txt
+        echo "QA deploy_project completed..."
+      fi
+  dependencies:
+    - build_project
+  only:
+    - /^.*-ekr$/
+  tags:
+    - pl1-3 ubuntu
+
+publish_project:
+  stage: publish
+  variables:
+    REGISTRY_URL: 192.168.157.52:4872
+  script:
+    - echo "lib_build_project started..."
+    - yarn add cross-env --dev
+    - yarn lib:build
+    - echo "lib_build_project completed..."
+    - echo "publish_project started..."
+    - echo "@wapl:registry=http://${REGISTRY_URL}" > .npmrc
+    - echo "//${REGISTRY_URL}/:_authToken=${NPM_TOKEN}" >> .npmrc
+    - npm publish
+    - echo "publish_project completed..."
+  only:
+    - /^.*-ekr-lib$/
+  tags:
+    - pl1-3 ubuntu
+
+publish_widget:
+  stage: publish_widget
+  variables:
+    REGISTRY_URL: 192.168.157.52:4872
+  script:
+    - echo "widget_lib_build_project started..."
+    - yarn add cross-env --dev
+    - yarn lib:build:ekr
+    - echo "widget_lib_build_project completed..."
+    - echo "widget_publish_project started..."
+    - echo "@wapl:registry=http://${REGISTRY_URL}" > .npmrc
+    - echo "//${REGISTRY_URL}/:_authToken=${NPM_TOKEN}" >> .npmrc
+    - npm version $CI_COMMIT_TAG --no-git-tag-version
+    - npm publish
+    - echo "widget_publish_project completed..."
+  only:
+    - /^.*-ekr-widget$/
+  tags:
+    - pl1-3 ubuntu

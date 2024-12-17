@@ -1,0 +1,12 @@
+export { rootStore, useStore as useTalkStore } from './stores';
+// export { MobileTalk } from './components/Mobile';
+export * from './components/Common/Dialog';
+export * from './components/Desktop';
+export * from './components/Common/RoomMenuItems';
+export * from './assets';
+export * from './@types';
+export * from './models';
+export * from './components/widget';
+export { default as EmoticonModal } from './components/Desktop/TalkFooter/Modal/EmoticonModal';
+export { default as i18n, translationEN, translationKO } from './i18n';
+export { default as MobileTalk } from './components/Mobile/TalkComponent/TalkComponent';

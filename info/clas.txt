@@ -1,0 +1,35 @@
+WAPL-TALK-FRONT INFO
+
+Module Name: WAPL-TALK
+Deployed Date: 20240516
+
+Environment Variable:
+window.env = {   
+  BUSINESS_NAME: 'CLAS',
+  SOCKET_URL: 'wss://clas-dev.tmax-superapp.com',
+  COMMON_POOL_ID: 'wapl-common',
+  AUTH_POOL_ID: 'wapl-auth',
+  TALK_POOL_ID: 'wapl-talk',
+  NOTICE_POOL_ID: 'wapl-notiCenter',
+  CONTACT_POOL_ID: 'wapl-contact',
+};  
+
+Image Update Log
+V0.0.4:
+  - 푸터 메뉴 없을 경우 접힘 기능 제거
+  - 메세지 삭제 시 lnb 날짜 업데이트 로직 수정
+  - 이미지 전체 화면 표시에서 저장 옆 기획에 없는 아이콘 노출되는 이슈 해결
+  - core 0.3.10-sas 적용
+V0.0.3:
+  - 답장 메시지 클릭시 etc버튼 눌리지 않는 이슈
+  - core 0.3.9-sas 적용
+v0.0.2:
+  - 링크로 답장 메시지 생성시 원본 메시지로 이동하지 않는 이슈 해결
+  - 이미지/동영상 답장시 input 영역에 썸네일 표시되지 않는 이슈 해결
+  - 이미지 전체화면에서 저장 클릭 시, 저장 토스트 팝업이 호출되지 않는 이슈 해결
+  - 미팅을 호출한 사람이 다시 톡 앱으로 돌아오면, '미팅을 시작합니다' 라는 메시지를 읽어도 언리드카운트 1이 없어지지 않는 이슈 해결
+  - 여기까지 읽었습니다 자동메시지가 다른 메시지와 겹쳐보이는 이슈 해결
+  - 이미지 파일에 답장 시, 해당 이미지를 불러오지 못하는 이슈 해결
+  - 방의 마지막 메시지가 이미지 파일 메시지면, 새로고침 시 LNB 영역에서 모든 방의 마지막 메시지가 보이지 않는 이슈 해결
+v0.0.1:
+  - wapl-talk 최초 배포

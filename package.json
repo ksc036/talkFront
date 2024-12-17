@@ -1,0 +1,169 @@
+{
+  "name": "@wapl/talk",
+  "version": "0.3.27-sas",
+  "main": "dist/index.cjs.js",
+  "homepage": ".",
+  "types": "dist/dts/src/external.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "dependencies": {
+    "@mui/x-date-pickers": "^5.0.8",
+    "@shell/sdk": "1.2.1",
+    "@tanstack/react-virtual": "^3.10.5",
+    "@wapl/auth": "1.0.42",
+    "@wapl/core": "1.0.32",
+    "@wapl/ui": "0.3.1-superapp",
+    "axios": "^0.26.1",
+    "i18next": "^23.13.0",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "jszip": "^3.10.1",
+    "lodash": "^4.17.21",
+    "luxon": "^3.1.0",
+    "mobx": "^6.5.0",
+    "mobx-react": "^7.6.0",
+    "mobx-react-lite": "^3.3.0",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.40",
+    "path": "^0.12.7",
+    "qs": "^6.11.1",
+    "quill-mention": "^3.1.0",
+    "rc-upload": "^4.3.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-highlight-words": "^0.20.0",
+    "react-i18next": "^15.0.1",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-intersection-observer": "^9.5.2",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "6.4.2",
+    "react-scripts": "5.0.1",
+    "terser-webpack-plugin": "^5.3.6",
+    "use-long-press": "^2.0.3",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "cross-env REACT_APP_PLATFORM=superapp craco start",
+    "start:sen": "cross-env REACT_APP_PLATFORM=sen craco start",
+    "start:foodist": "cross-env REACT_APP_PLATFORM=foodist craco start",
+    "start:ekr": "cross-env REACT_APP_PLATFORM=ekr craco start",
+    "start:clas_admin": "cross-env REACT_APP_PLATFORM=clas_admin craco start",
+    "build": "cross-env REACT_APP_PLATFORM=superapp craco build",
+    "build:sen": "cross-env REACT_APP_PLATFORM=sen craco build",
+    "build:foodist": "cross-env REACT_APP_PLATFORM=foodist craco build",
+    "build:ekr": "cross-env REACT_APP_PLATFORM=ekr craco build",
+    "build:clas_admin": "cross-env REACT_APP_PLATFORM=clas_admin craco build",
+    "dev:build:foodist": "cross-env REACT_APP_PLATFORM=foodist craco build && ./deploy_desktop.sh && ./deploy_mobile.sh",
+    "lib:start": "rollup -c -w",
+    "lib:build": "cross-env REACT_APP_ROLLUP=true rollup -c",
+    "lib:build:foodist": "cross-env REACT_APP_PLATFORM=foodist REACT_APP_ROLLUP=true rollup -c",
+    "lib:build:ekr": "cross-env REACT_APP_PLATFORM=ekr REACT_APP_ROLLUP=true rollup -c",
+    "lib:build:sen": "cross-env REACT_APP_PLATFORM=seoul_edu REACT_APP_ROLLUP=true rollup -c",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "prepare": "husky install"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/plugin-syntax-flow": "^7.14.5",
+    "@babel/plugin-transform-react-jsx": "^7.14.9",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@babel/runtime": "^7.20.6",
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
+    "@craco/craco": "^7.0.0",
+    "@mui/utils": "^5.15.11",
+    "@rollup/plugin-alias": "^4.0.3",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^23.0.3",
+    "@rollup/plugin-image": "^3.0.1",
+    "@rollup/plugin-json": "^5.0.2",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-url": "^8.0.1",
+    "@svgr/rollup": "^6.5.1",
+    "@testing-library/dom": "^7.21.4",
+    "@tmaxoffice/docs": "^0.1.51",
+    "@types/lodash": "^4.14.191",
+    "@types/luxon": "^3.2.0",
+    "@types/node": "^16.18.4",
+    "@types/qs": "^6.9.7",
+    "@types/quill": "^2.0.10",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/react-highlight-words": "^0.16.4",
+    "@types/testing-library__jest-dom": "^5.14.5",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "@wapl/pl-idb": "^1.0.0",
+    "babel-plugin-named-exports-order": "^0.0.2",
+    "craco-esbuild": "^0.5.2",
+    "cross-env": "^7.0.3",
+    "eslint": ">=7.28.0 <8.0.0 || >=8.0.0 <9.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.5.4",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.11",
+    "husky": "^8.0.0",
+    "prettier": "^2.8.0",
+    "prop-types": "^15.8.1",
+    "react-uuid": "^2.0.0",
+    "react-virtuoso": "^4.7.8",
+    "rollup": "^2.79.1",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "rollup-plugin-visualizer": "^5.8.3",
+    "typescript": "^4.9.3"
+  },
+  "peerDependencies": {
+    "@babel/plugin-syntax-flow": "^7.14.5",
+    "@babel/plugin-transform-react-jsx": "^7.14.9",
+    "@wapl/core": "1.0.32",
+    "@wapl/ui": "0.3.1-superapp",
+    "axios": "^0.26.1",
+    "mobx": "^6.5.0",
+    "mobx-react": "^7.6.0",
+    "mobx-react-lite": "^3.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "6.4.2"
+  },
+  "resolutions": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0"
+  }
+}
